@@ -1,2 +1,3 @@
 bucket-service-account.json
-__pycache__/
+/__pycache__
+**/__pycache__
