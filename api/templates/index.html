@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <title>TorToiSe API</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', path='/favicon/apple-touch-icon.png') }}">
+        <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', path='/favicon/favicon-32x32.png') }}">
+        <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', path='/favicon/favicon-16x16.png') }}">
+        <link rel="manifest" href="{{ url_for('static', path='/favicon/site.webmanifest') }}">
+
+        <!-- CSS only -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+        <link href="{{ url_for('static', path='/styles.css') }}" rel="stylesheet">
+        
+    </head>
+    <body class="background">
+
+        <div class="container">
+            <div class="row">
+              <div class="col-10 offset-1">
+                <div class="workspace align-self-center">
+                    <div class="card">
+                        <div class="card-header">
+                          TTS Generator
+                        </div>
+                        <div class="card-body">
+                          <h5 class="card-title">Generate audio from text</h5>
+                          <form method="post" action="/api/do_tts">
+                            <!-- Voice selector -->
+                            <div class="mb-3">
+                              <label for="voice" class="form-label">Select Voice</label>
+                              <select class="form-select" aria-label="Default select example" id="voice" name="voice" value="{{voice}}" required>
+                                
+                                {% for voice in voices %}
+                                        {% if voice == 'mol' %}
+                                            <option selected> {{voices[voice]}} </option>
+                                        {% else %}
+                                            <option> {{voices[voice]}} </option>
+                                        {% endif %}
+                                  {% endfor%}
+
+                              </select>
+                            </div>
+                            
+                            <!-- Quality selector -->
+                            <div class="mb-3">
+                                <label for="voice" class="form-label">Select Quality</label>
+                                <select class="form-select" aria-label="Default select example" id="quality" name="quality" value="{{quality}}" required>
+                                  
+                                    {% for quality in quality_list %}
+                                        {% if quality == 'fast' %}
+                                            <option selected> {{quality_list[quality]}} </option>
+                                        {% else %}
+                                            <option> {{quality_list[quality]}} </option>
+                                        {% endif %}
+                                  {% endfor%}
+                                  
+                                </select>
+                              </div>
+
+                              <!-- Candidates selector -->
+                            <div class="mb-3">
+                                <label for="voice" class="form-label">Output audio examples</label>
+                                <select class="form-select" aria-label="Default select example" id="candidate" name="candidate" value="{{candidate}}" required>
+                                    
+                                    {% for candidate in candidates %}
+                                        {% if candidate == 1 %}
+                                            <option selected> {{candidate}} </option>
+                                        {% else %}
+                                            <option> {{candidate}} </option>
+                                        {% endif %}
+                                    {% endfor%}
+                                    
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                              <label for="text" class="form-label">Ingresa el texto</label>
+                              <textarea rows="5" class="form-control" placeholder="Leave a your text here" id="text" name="text" value="{{text}}" required></textarea>
+                            </div>
+
+                            <div class="d-grid gap-2">
+                              <button class="btn btn-primary" class="submit" id="submit">Generate</button>
+                            </div>
+
+                          </form>
+                        </div>
+                      </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+      <!-- JavaScript Bundle with Popper -->
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+      <link href="" rel="stylesheet">
+      <script src="{{ url_for('static', path='/script.js') }}" ></script>
+ 
+    </body>
+</html>

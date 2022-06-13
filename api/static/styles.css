@@ -1,3 +1,17 @@
-h1 {
-    color: green;
+.background {
+  /* fallback for old browsers */
+  background: #6a85b6;
+
+  /* Chrome 10-25, Safari 5.1-6 */
+  background: -webkit-linear-gradient(to right, rgba(106, 133, 182, 0.5), rgba(186, 200, 224, 0.5));
+
+  /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  background: linear-gradient(to right, rgba(106, 133, 182, 0.5), rgba(186, 200, 224, 0.5))
+}
+
+    
+
+.workspace{
+    background: white;
+    border-radius: 25px;
 }
