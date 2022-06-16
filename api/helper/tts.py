@@ -2,6 +2,7 @@ import os
 import sys
 from time import time
 from datetime import datetime
+from .bucket import upload_file
 
 import torch
 import torchaudio
@@ -72,28 +73,53 @@ def generate_tts(voice='mol', text = 'Hello world', preset='fast', candidates = 
                                       preset=preset, k=candidates, use_deterministic_seed=seed)
             if candidates == 1:
                 gen = gen.squeeze(0).cpu()
-                torchaudio.save(os.path.join(result_outpath, f'{j}.wav'), gen, 24000)
+                file_name = os.path.join(result_outpath, f'{j}.wav')
+                torchaudio.save(file_name, gen, 24000)
+
+                # Uploading chunk files
+                upload_file(file_name)
+                print(f"{file_name} uploaded")
+
+                # Removing file from disk
+                if os.path.isfile(file_name):
+                    os.remove(file_name)
+                else:   
+                    print(f"Error: {file_name} file not found")
+
+
             else:
                 candidate_dir = os.path.join(result_outpath, str(j))
                 os.makedirs(candidate_dir, exist_ok=True)
                 for k, g in enumerate(gen):
-                    torchaudio.save(os.path.join(candidate_dir, f'{k}.wav'), g.squeeze(0).cpu(), 24000)
+                    file_name = os.path.join(candidate_dir, f'{k}.wav')
+                    torchaudio.save(file_name, g.squeeze(0).cpu(), 24000)
+                    
+                    # Uploading chunk files
+                    upload_file(file_name)
+                    print(f"{file_name} uploaded")
+
+                    # Removing file from disk
+                    if os.path.isfile(file_name):
+                        os.remove(file_name)
+                    else:   
+                        print(f"Error: {file_name} file not found")
+
                 gen = gen[0].squeeze(0).cpu()
             all_parts.append(gen)
 
         if candidates == 1:
             full_audio = torch.cat(all_parts, dim=-1)
-            torchaudio.save(os.path.join(result_outpath, 'combined.wav'), full_audio, 24000)
+            file_name = os.path.join(result_outpath, 'combined.wav')
+            torchaudio.save(file_name, full_audio, 24000)
 
-        # Combine each candidate's audio clips.
-        if candidates > 1:
-            audio_clips = []
-            for candidate in range(candidates):
-                for line in range(len(texts)):
-                    wav_file = os.path.join(result_outpath, str(line), f"{candidate}.wav")
-                    audio_clips.append(load_audio(wav_file, 24000))
-                audio_clips = torch.cat(audio_clips, dim=-1)
-                torchaudio.save(os.path.join(result_outpath, f"combined_{candidate:02d}.wav"), audio_clips, 24000)
-                audio_clips = []
+            # Uploading chunk files
+            upload_file(file_name)
+            print(f"{file_name} uploaded")
+
+            # Removing file from disk
+            if os.path.isfile(file_name):
+                os.remove(file_name)
+            else:   
+                print(f"Error: {file_name} file not found")
 
     return {"status": "done"}
