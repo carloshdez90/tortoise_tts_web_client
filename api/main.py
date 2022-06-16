@@ -5,7 +5,7 @@ from fastapi import FastAPI, Request, Form, status
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
-from helper.tts import get_voices, get_quality, get_candidates, generate_tts
+from helper.tts import get_voices, get_quality, get_candidates, get_audios, generate_tts
 from helper.bucket import get_folder_list
 
 # declarations
@@ -26,7 +26,8 @@ async def index(request: Request):
         "request": request,
         "voices": get_voices(),
         "quality_list": get_quality(),
-        "candidates":get_candidates()
+        "candidates":get_candidates(),
+        "audios": get_audios()
     }
     return templates.TemplateResponse("index.html", params)
 

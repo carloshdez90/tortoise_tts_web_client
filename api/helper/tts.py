@@ -1,5 +1,4 @@
 import os
-import io
 import sys
 from time import time
 from datetime import datetime
@@ -16,6 +15,16 @@ from utils.text import split_and_recombine_text
 def get_voices():
     voices = sorted(os.listdir('../../tortoise-tts/tortoise/voices'))
     return dict(zip(voices, voices))
+
+def get_audios():
+    voices = []
+    paths = sorted([ 'static/voices/'+voice+'/' for voice in os.listdir('static/voices/')])
+
+    for path in paths:
+        file = path+os.listdir(path)[0]
+        voices.append({'file': '/'+file, 'format': file.split('.')[-1], 'voice':path.split('/')[-2]})
+
+    return voices
 
 def get_quality():
     values = ["ultra_fast", "fast", "standard", "high_quality"]

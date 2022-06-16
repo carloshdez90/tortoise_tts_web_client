@@ -41,11 +41,37 @@
                                         {% endif %}
                                   {% endfor%}
 
-                              </select>
+                              </select>                              
                             </div>
-                            
+
+                            <div class="accordion" id="voicesExamples">
+                              <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingOne">
+                                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-controls="collapseOne">
+                                    Voices List
+                                  </button>
+                                </h2>
+                                <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#voicesExamples">
+                                  <div class="accordion-body">
+
+                                    {% for audio in audios %}
+                                      <div class="row">
+                                        <div class="col-2 offset-2 d-flex align-items-center"><span class="align-middle">{{audio.voice}}</span></div>
+                                        <div class="col-6">
+                                          <audio controls>
+                                            {% set audio_format = "audio/" + audio.format %}
+                                            <source src={{audio.file}} type={{audio_format}}>
+                                          </audio>
+                                         </div>
+                                      </div >                                      
+                                    {% endfor %}
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
                             <!-- Quality selector -->
-                            <div class="mb-3">
+                            <div class="mb-3 mt-25">
                                 <label for="voice" class="form-label">Select Quality</label>
                                 <select class="form-select" aria-label="Default select example" id="quality" name="quality" value="{{quality}}" required>
                                   
