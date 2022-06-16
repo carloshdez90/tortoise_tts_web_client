@@ -17,3 +17,19 @@
 .mt-25{
   margin-top: 25px;
 }
+
+.logo{
+  border-radius: 100%;
+  width: 50px;
+}
+
+.logo-link{
+  text-decoration: none;
+}
+
+.loader {
+  width: 300px; 
+  height: 300px; 
+  margin: 0 auto;
+  display: none;
+}

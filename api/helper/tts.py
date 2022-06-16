@@ -57,7 +57,8 @@ def generate_tts(voice='mol', text = 'Hello world', preset='fast', candidates = 
 
     selected_voices = voice.split(',')
     seed = int(time()) if seed is None else seed
-    result_outpath = os.path.join(output_path, datetime.now().strftime("%Y-%d-%m_%H-%M"))
+    folder_name = datetime.now().strftime("%Y-%d-%m_%H-%M")
+    result_outpath = os.path.join(output_path, folder_name)
     os.makedirs(result_outpath, exist_ok=True)
     
     for k, selected_voice in enumerate(selected_voices):
@@ -77,7 +78,7 @@ def generate_tts(voice='mol', text = 'Hello world', preset='fast', candidates = 
                 torchaudio.save(file_name, gen, 24000)
 
                 # Uploading chunk files
-                upload_file(file_name)
+                upload_file('/'.join(file_name.split('/')[1:]), file_name)
                 print(f"{file_name} uploaded")
 
                 # Removing file from disk
@@ -95,7 +96,7 @@ def generate_tts(voice='mol', text = 'Hello world', preset='fast', candidates = 
                     torchaudio.save(file_name, g.squeeze(0).cpu(), 24000)
                     
                     # Uploading chunk files
-                    upload_file(file_name)
+                    upload_file('/'.join(file_name.split('/')[1:]), file_name)
                     print(f"{file_name} uploaded")
 
                     # Removing file from disk
@@ -113,7 +114,7 @@ def generate_tts(voice='mol', text = 'Hello world', preset='fast', candidates = 
             torchaudio.save(file_name, full_audio, 24000)
 
             # Uploading chunk files
-            upload_file(file_name)
+            upload_file('/'.join(file_name.split('/')[1:]), file_name)
             print(f"{file_name} uploaded")
 
             # Removing file from disk
@@ -122,4 +123,4 @@ def generate_tts(voice='mol', text = 'Hello world', preset='fast', candidates = 
             else:   
                 print(f"Error: {file_name} file not found")
 
-    return {"status": "done"}
+    return {"folder": folder_name}
