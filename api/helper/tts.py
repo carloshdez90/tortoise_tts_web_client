@@ -7,14 +7,13 @@ from .bucket import upload_file
 import torch
 import torchaudio
 
-sys.path.append('../../tortoise-tts/tortoise/')
-from api import TextToSpeech, MODELS_DIR
-from utils.audio import load_audio, load_voices
-from utils.text import split_and_recombine_text
+from tortoise.api import TextToSpeech, MODELS_DIR
+from tortoise.utils.audio import load_audio, load_voices
+from tortoise.utils.text import split_and_recombine_text
 
 # Get voices available in tortoise-tts lib
 def get_voices():
-    voices = sorted(os.listdir('../../tortoise-tts/tortoise/voices'))
+    voices = sorted(os.listdir('../tortoise-tts/tortoise/voices'))
     return dict(zip(voices, voices))
 
 def get_audios():
@@ -57,7 +56,7 @@ def generate_tts(voice='mol', text = 'Hello world', preset='fast', candidates = 
 
     selected_voices = voice.split(',')
     seed = int(time()) if seed is None else seed
-    folder_name = datetime.now().strftime("%Y-%d-%m_%H-%M")
+    folder_name = datetime.now().strftime("%Y-%m-%d_%H-%M")
     result_outpath = os.path.join(output_path, folder_name)
     os.makedirs(result_outpath, exist_ok=True)
     
