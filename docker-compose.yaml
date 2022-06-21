@@ -1,0 +1,14 @@
+version: '3.8'
+services:
+  api:
+    image: tts-generator:v1
+    ports:
+      - "80:80"  #localhost port : container exposed port
+    working_dir: /code/api
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
