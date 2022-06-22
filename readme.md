@@ -1,3 +1,12 @@
+# Getting Started
+- clone this repo
+- update submodule 
+    - ```git submodule init```
+    - ```git submodule update```
+
+# Setup google service account to use google bucket
+- put json file into api folder
+
 # Install dependencies
 ```bash
 pip install -r requirements.txt
@@ -16,7 +25,7 @@ uvicorn main:app --reload
 - https://lambdalabs.com/lambda-stack-deep-learning-software 
 - https://github.com/lambdal/lambda-stack-dockerfiles
 
-## Download pytorch
+## Download pytorch in repo root folder
 - ```wget https://download.pytorch.org/whl/cu113/torch-1.11.0%2Bcu113-cp38-cp38-linux_x86_64.whl```
 ## Build base image
 - move to docker-lambda folder
@@ -24,4 +33,4 @@ uvicorn main:app --reload
 - Use this image to build your custom image with your code.
 
 ## Create custom image based on lambda-stack
-- ```docker build -t tts-generator:v1 .```
+- ```docker build --no-cache -t tts-generator:v1 .```
