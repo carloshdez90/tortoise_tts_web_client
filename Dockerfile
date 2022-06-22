@@ -30,4 +30,4 @@ RUN cd tortoise-tts && python setup.py install
 
 WORKDIR /code/api
 
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "80", "--proxy-headers"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "80", "--proxy-headers", "--workers", "4"]
