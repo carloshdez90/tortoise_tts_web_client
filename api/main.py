@@ -1,11 +1,12 @@
 import os
 from typing import Union, Optional
-from fastapi import FastAPI, Request, Form, status
+from fastapi import FastAPI, Request, Form, status, HTTPException
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from helper.tts import get_voices, get_quality, get_candidates, get_audios, generate_tts
 from helper.bucket import get_folder_list, generate_download_signed_urls
+from helper.sso import validate_token
 
 # declarations
 app = FastAPI()
@@ -39,8 +40,20 @@ async def do_tts(request: Request,
                     voice: str = Form(),
                     text: str = Form(),
                     quality: str = Form(),
-                    candidate: Optional[int] = Form(None)):
+                    candidate: Optional[int] = Form(None),
+                    token: str = Form(),
+                    api_mode: Optional[bool] = Form(False)):
+
+    #validate if the provided token is valid
+    response = validate_token(token)
+    if response.status_code != 200 or dict(response.json())['active'] == False:
+        raise HTTPException(status_code=400, detail="Invalid provided token")
+    
+
     url = app.url_path_for("index")
     response = generate_tts(voice, text, preset=quality, candidates=candidate)
 
-    return RedirectResponse(f"{url}?folder={response['folder']}", status_code=status.HTTP_303_SEE_OTHER)
+    if api_mode:
+        return generate_download_signed_urls(get_folder_list(response['folder']))
+    else: 
+        return RedirectResponse(f"{url}?folder={response['folder']}", status_code=status.HTTP_303_SEE_OTHER)

@@ -7,6 +7,9 @@
 # Setup google service account to use google bucket
 - put json file into api folder
 
+# Fill dotenv file in helper folder
+- Use the ```.env.example``` as template
+
 # Install dependencies
 ```bash
 pip install -r requirements.txt
