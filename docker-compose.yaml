@@ -1,10 +1,10 @@
-version: '3.8'
+version: "3.8"
 services:
   api:
-    image: tts-generator:v1
+    image: tts-generator:v5
     ports:
-      - "80:80"  #localhost port : container exposed port
-    working_dir: /code/api
+      - "80:80" #localhost port : container exposed port
+    working_dir: /app/api
     deploy:
       resources:
         reservations:

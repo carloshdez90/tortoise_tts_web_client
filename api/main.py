@@ -15,45 +15,57 @@ templates = Jinja2Templates(directory="templates")
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = './bucket-service-account.json'
 
 # Utility methods
+
+
 def folders(prefix: Union[str, None] = None):
     folder_list = get_folder_list(prefix)
     return dict(zip(folder_list, folder_list))
 
 # Endpoints
+
+
 @app.get("/", response_class=HTMLResponse)
 async def index(request: Request, folder: Union[str, None] = None):
     params = {
         "request": request,
         "voices": get_voices(),
         "quality_list": get_quality(),
-        "candidates":get_candidates(),
+        "candidates": get_candidates(),
         "audios": get_audios()
     }
 
     if folder is not None:
-        params['object_list'] = generate_download_signed_urls(get_folder_list(folder))
+        params['object_list'] = generate_download_signed_urls(
+            get_folder_list(folder))
 
     return templates.TemplateResponse("index.html", params)
 
-@app.post("/api/do_tts")
-async def do_tts(request: Request, 
-                    voice: str = Form(),
-                    text: str = Form(),
-                    quality: str = Form(),
-                    candidate: Optional[int] = Form(None),
-                    token: str = Form(),
-                    api_mode: Optional[bool] = Form(False)):
 
-    #validate if the provided token is valid
-    response = validate_token(token)
-    if response.status_code != 200 or dict(response.json())['active'] == False:
-        raise HTTPException(status_code=400, detail="Invalid provided token")
-    
+@app.post("/api/do_tts")
+async def do_tts(request: Request,
+                 voice: str = Form(),
+                 text: str = Form(),
+                 quality: str = Form(),
+                 candidate: Optional[int] = Form(None),
+                 token: Optional[str] = Form(None),
+                 api_mode: Optional[bool] = Form(False)):
+
+    if api_mode:
+        # validate if the provided token is valid
+        try:
+            response = validate_token(token)
+        except:
+            raise HTTPException(
+                status_code=400, detail="Invalid provided token")
+
+        if response.status_code != 200 or dict(response.json())['active'] == False:
+            raise HTTPException(
+                status_code=400, detail="Invalid provided token")
 
     url = app.url_path_for("index")
     response = generate_tts(voice, text, preset=quality, candidates=candidate)
 
     if api_mode:
         return generate_download_signed_urls(get_folder_list(response['folder']))
-    else: 
+    else:
         return RedirectResponse(f"{url}?folder={response['folder']}", status_code=status.HTTP_303_SEE_OTHER)
