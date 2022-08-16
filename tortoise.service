@@ -1,0 +1,12 @@
+[Unit]
+Description=Gunicorn Daemon to deploy TorToiSe Model with fastAPI
+After=network.target
+
+[Service]
+User=charlie
+Group=www-data
+WorkingDirectory=/home/charlie/ws/tortoise_tts_web_client/api
+ExecStart=/home/charlie/envs/tortoise/bin/gunicorn -c /home/charlie/ws/tortoise_tts_web_client/api/gunicorn_conf.py main:app
+
+[Install]
+WantedBy=multi-user.target
