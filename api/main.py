@@ -41,7 +41,7 @@ async def index(request: Request, folder: Union[str, None] = None):
     return templates.TemplateResponse("index.html", params)
 
 
-@app.post("/api/do_tts")
+@app.post("/do_tts")
 async def do_tts(request: Request,
                  voice: str = Form(),
                  text: str = Form(),
