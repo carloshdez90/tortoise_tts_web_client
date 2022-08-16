@@ -11,6 +11,10 @@ bind = 'unix:/home/deploy/tts/gunicorn.sock'
 workers = cpu_count() + 1
 worker_class = 'uvicorn.workers.UvicornWorker'
 
+# Timeout
+keepalive = 120
+timeout = 7200
+
 # Logging Options
 loglevel = 'debug'
 accesslog = '/home/deploy/tts/logs/access_log.log'
