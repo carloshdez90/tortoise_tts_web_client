@@ -1,7 +1,8 @@
 import datetime
 from google.cloud import storage
 
-BUCKET="tortoise-tts"
+BUCKET = "ai-tortoise-tts"
+
 
 def get_folder_list(prefix=None):
 
@@ -16,6 +17,7 @@ def get_folder_list(prefix=None):
         folders = sorted(list(set([k.name.split('/')[0] for k in blobs])))
 
     return folders
+
 
 def upload_file(destination, file_name):
     storage_client = storage.Client()
@@ -44,8 +46,10 @@ def generate_download_signed_urls(blob_list):
             method="GET",
         )
         signed_urls.append({
-                            'filename': blob_name.split('/')[-1],
-                            'signed_url': url
-                            })
+            'bucket': BUCKET,
+            'blob': blob_name,
+            'filename': blob_name.split('/')[-1],
+            'signed_url': url
+        })
 
     return signed_urls

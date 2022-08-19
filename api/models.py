@@ -8,4 +8,4 @@ class TTSParams(BaseModel):
     quality: str
     candidate: Union[int, None] = 1
     api_mode: Union[bool, None] = True
-    token: str
+    token: Union[str, None] = None
