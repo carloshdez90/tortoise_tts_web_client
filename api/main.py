@@ -7,6 +7,7 @@ from fastapi.staticfiles import StaticFiles
 from helper.tts import get_voices, get_quality, get_candidates, get_audios, generate_tts
 from helper.bucket import get_folder_list, generate_download_signed_urls
 from helper.sso import validate_token
+from models import TTSParams
 
 # declarations
 app = FastAPI()
@@ -42,13 +43,7 @@ async def index(request: Request, folder: Union[str, None] = None):
 
 
 @app.post("/do-tts")
-async def do_tts(request: Request,
-                 voice: str = Form(),
-                 text: str = Form(),
-                 quality: str = Form(),
-                 candidate: Optional[int] = Form(None),
-                 token: Optional[str] = Form(None),
-                 api_mode: Optional[bool] = Form(False)):
+async def do_tts(request: Request, item: TTSParams):
 
     # if api_mode:
     #     # validate if the provided token is valid
@@ -63,9 +58,12 @@ async def do_tts(request: Request,
     #             status_code=400, detail="Invalid provided token")
 
     url = app.url_path_for("index")
-    response = generate_tts(voice, text, preset=quality, candidates=candidate)
+    response = generate_tts(item.voice,
+                            item.text,
+                            preset=item.quality,
+                            candidates=item.candidate)
 
-    if api_mode:
+    if item.api_mode:
         return generate_download_signed_urls(get_folder_list(response['folder']))
     else:
         return RedirectResponse(f"{url}?folder={response['folder']}", status_code=status.HTTP_303_SEE_OTHER)
