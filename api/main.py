@@ -50,17 +50,17 @@ async def do_tts(request: Request,
                  token: Optional[str] = Form(None),
                  api_mode: Optional[bool] = Form(False)):
 
-    if api_mode:
-        # validate if the provided token is valid
-        try:
-            response = validate_token(token)
-        except:
-            raise HTTPException(
-                status_code=400, detail="Invalid provided token")
+    # if api_mode:
+    #     # validate if the provided token is valid
+    #     try:
+    #         response = validate_token(token)
+    #     except:
+    #         raise HTTPException(
+    #             status_code=400, detail="Invalid provided token")
 
-        if response.status_code != 200 or dict(response.json())['active'] == False:
-            raise HTTPException(
-                status_code=400, detail="Invalid provided token")
+    #     if response.status_code != 200 or dict(response.json())['active'] == False:
+    #         raise HTTPException(
+    #             status_code=400, detail="Invalid provided token")
 
     url = app.url_path_for("index")
     response = generate_tts(voice, text, preset=quality, candidates=candidate)
