@@ -2,7 +2,7 @@ version: "3.8"
 services:
   api:
     image: tts-generator:v1
-    mem_limit: 8g
+    mem_limit: 12g
     cpus: 2
     ports:
       - "8888:80" #localhost port : container exposed port
