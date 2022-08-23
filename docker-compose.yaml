@@ -1,7 +1,7 @@
 version: "3.8"
 services:
   api:
-    image: tts-generator:v1
+    build: .
     mem_limit: 12g
     cpus: 2
     ports:
